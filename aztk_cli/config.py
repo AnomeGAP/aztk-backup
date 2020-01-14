@@ -198,9 +198,10 @@ class JobConfig:
             if cluster_configuration.get("size_low_priority") is not None:
                 self.max_low_pri_nodes = cluster_configuration.get("size_low_priority")
             self.subnet_id = cluster_configuration.get("subnet_id")
-            for plugin in cluster_configuration.get("plugins"):
-                ref = PluginReference.from_dict(plugin)
-                self.plugins.append(ref.get_plugin())
+            if cluster_configuration.get("plugins") is not None:
+                for plugin in cluster_configuration.get("plugins"):
+                    ref = PluginReference.from_dict(plugin)
+                    self.plugins.append(ref.get_plugin())
             self.worker_on_master = cluster_configuration.get("worker_on_master")
             scheduling_target = cluster_configuration.get("scheduling_target")
             if scheduling_target:

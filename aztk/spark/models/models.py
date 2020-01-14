@@ -184,7 +184,7 @@ class JobConfiguration:
             max_dedicated_nodes=0,
             max_low_pri_nodes=0,
             subnet_id=None,
-            plugins=[],
+            plugins=None,
             scheduling_target: SchedulingTarget = None,
             worker_on_master=None,
     ):
