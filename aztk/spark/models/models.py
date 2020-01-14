@@ -184,6 +184,7 @@ class JobConfiguration:
             max_dedicated_nodes=0,
             max_low_pri_nodes=0,
             subnet_id=None,
+            plugins=[],
             scheduling_target: SchedulingTarget = None,
             worker_on_master=None,
     ):
@@ -199,6 +200,7 @@ class JobConfiguration:
         self.max_dedicated_nodes = max_dedicated_nodes
         self.max_low_pri_nodes = max_low_pri_nodes
         self.subnet_id = subnet_id
+        self.plugins = plugins
         self.worker_on_master = worker_on_master
         self.scheduling_target = scheduling_target
 
@@ -210,6 +212,7 @@ class JobConfiguration:
             size=self.max_dedicated_nodes,
             size_low_priority=self.max_low_pri_nodes,
             subnet_id=self.subnet_id,
+            plugins=self.plugins,
             worker_on_master=self.worker_on_master,
             spark_configuration=self.spark_configuration,
             scheduling_target=self.scheduling_target,

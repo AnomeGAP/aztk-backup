@@ -47,6 +47,7 @@ def execute(args: typing.NamedTuple):
         max_dedicated_nodes=job_conf.max_dedicated_nodes,
         max_low_pri_nodes=job_conf.max_low_pri_nodes,
         subnet_id=job_conf.subnet_id,
+        plugins=job_conf.plugins,
         worker_on_master=job_conf.worker_on_master,
         scheduling_target=job_conf.scheduling_target,
     )
