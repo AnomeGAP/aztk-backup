@@ -128,7 +128,7 @@ class NodeData:
                         target_role=plugin.target_role.value,
                     ))
 
-        self.zipf.writestr(os.path.join("plugins", "plugins-manifest.yaml"), yaml.dump(data, default_dlow_style=None))
+        self.zipf.writestr(os.path.join("plugins", "plugins-manifest.yaml"), yaml.dump(data, default_flow_style=None))
 
     def _add_node_scripts(self):
         self.add_dir(os.path.join(ROOT_PATH, NODE_SCRIPT_FOLDER), NODE_SCRIPT_FOLDER, exclude=["*.pyc*", "*.png"])
