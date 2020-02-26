@@ -22,7 +22,7 @@ def read_downloaded_tasks():
     for task_definition in tasks_path:
         with open(task_definition, "r", encoding="UTF-8") as stream:
             try:
-                tasks.append(yaml.load(stream, Loader=yaml.FullLoader))
+                tasks.append(yaml.load(stream, Loader=yaml.Loader))
             except yaml.YAMLError as exc:
                 print(exc)
     return tasks

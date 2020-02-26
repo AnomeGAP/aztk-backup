@@ -18,7 +18,7 @@ def create_user(batch_client):
         return
 
     with open(path, "r", encoding="UTF-8") as file:
-        user_conf = yaml.load(file.read(), Loader=yaml.FullLoader)
+        user_conf = yaml.load(file.read(), Loader=yaml.Loader)
 
     try:
         password = None if user_conf["ssh-key"] else decrypt_password(user_conf)

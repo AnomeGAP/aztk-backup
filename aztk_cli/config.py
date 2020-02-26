@@ -37,7 +37,7 @@ def _load_config_file(path: str):
 
     with open(path, "r", encoding="UTF-8") as stream:
         try:
-            return yaml.load(stream, Loader=yaml.FullLoader)
+            return yaml.load(stream, Loader=yaml.Loader)
         except yaml.YAMLError as err:
             raise aztk.error.AztkError("Error in {0}:\n {1}".format(path, err))
 
@@ -95,7 +95,7 @@ class SshConfig:
 
         with open(path, "r", encoding="UTF-8") as stream:
             try:
-                config = yaml.load(stream, Loader=yaml.FullLoader)
+                config = yaml.load(stream, Loader=yaml.Loader)
             except yaml.YAMLError as err:
                 raise aztk.error.AztkError("Error in ssh.yaml: {0}".format(err))
 
@@ -245,7 +245,7 @@ class JobConfig:
 
         with open(path, "r", encoding="UTF-8") as stream:
             try:
-                config = yaml.load(stream, Loader=yaml.FullLoader)
+                config = yaml.load(stream, Loader=yaml.Loader)
             except yaml.YAMLError as err:
                 raise aztk.error.AztkError("Error in job.yaml: {0}".format(err))
 

@@ -301,7 +301,7 @@ def test_serialize_simple_model_to_yaml():
 
     assert output == "!!python/object:tests.core.test_models.UserInfo {age: 29, name: John}\n"
 
-    info_parsed = yaml.load(output, Loader=yaml.FullLoader)
+    info_parsed = yaml.load(output, Loader=yaml.Loader)
 
     assert isinstance(info_parsed, UserInfo)
     assert info_parsed.name == "John"
@@ -318,7 +318,7 @@ def test_serialize_nested_model_to_yaml():
 
     assert output == "!!python/object:tests.core.test_models.User\nenabled: true\ninfo: {age: 29, name: John}\nstate: deleting\n"
 
-    user_parsed = yaml.load(output, Loader=yaml.FullLoader)
+    user_parsed = yaml.load(output, Loader=yaml.Loader)
 
     assert isinstance(user_parsed, User)
     assert isinstance(user_parsed.info, UserInfo)

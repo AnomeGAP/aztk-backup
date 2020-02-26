@@ -40,7 +40,7 @@ class ClusterData:
         blob_path = self.CLUSTER_DIR + "/" + self.CLUSTER_CONFIG_FILE
         try:
             result = self.blob_client.get_blob_to_text(self.cluster_id, blob_path)
-            return yaml.load(result.content, Loader=yaml.FullLoader)
+            return yaml.load(result.content, Loader=yaml.Loader)
         except azure.common.AzureMissingResourceHttpError:
             raise error.AztkError("Cluster {} doesn't have cluster configuration in storage".format(self.cluster_id))
         except yaml.YAMLError:
