@@ -17,7 +17,7 @@ class ConfigurationBase:
         try:
             return cls._from_dict(args)
         except (ValueError, TypeError) as e:
-            pretty_args = yaml.dump(args, default_flow_style=False)
+            pretty_args = yaml.dump(args, default_flow_style=None)
             raise AztkError("{0} {1}\n{2}".format(cls.__name__, str(e), pretty_args))
 
     @classmethod

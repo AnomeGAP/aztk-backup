@@ -31,7 +31,7 @@ class ClusterData:
     @retry(retry_count=4, retry_interval=1, backoff_policy=BackOffPolicy.exponential, exceptions=(ClientRequestError))
     def save_cluster_config(self, cluster_config):
         blob_path = self.CLUSTER_DIR + "/" + self.CLUSTER_CONFIG_FILE
-        content = yaml.dump(cluster_config)
+        content = yaml.dump(cluster_config, default_flow_style=None)
         container_name = cluster_config.cluster_id
         self.blob_client.create_blob_from_text(container_name, blob_path, content)
 

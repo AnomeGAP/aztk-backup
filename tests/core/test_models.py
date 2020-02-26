@@ -297,7 +297,7 @@ def test_merge_nested_model_append_strategy():
 
 def test_serialize_simple_model_to_yaml():
     info = UserInfo(name="John", age=29)
-    output = yaml.dump(info)
+    output = yaml.dump(info, default_flow_style=None)
 
     assert output == "!!python/object:tests.core.test_models.UserInfo {age: 29, name: John}\n"
 
@@ -314,7 +314,7 @@ def test_serialize_nested_model_to_yaml():
         enabled=True,
         state=UserState.Deleting,
     )
-    output = yaml.dump(user)
+    output = yaml.dump(user, default_flow_style=None)
 
     assert output == "!!python/object:tests.core.test_models.User\nenabled: true\ninfo: {age: 29, name: John}\nstate: deleting\n"
 

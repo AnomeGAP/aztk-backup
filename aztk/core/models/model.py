@@ -108,7 +108,7 @@ class Model(metaclass=ModelMeta):
         return output
 
     def __str__(self):
-        return yaml.dump(self.to_dict(), default_flow_style=False)
+        return yaml.dump(self.to_dict(), default_flow_style=None)
 
     def _update(self, values, ignore_missing=False):
         for k, v in values.items():

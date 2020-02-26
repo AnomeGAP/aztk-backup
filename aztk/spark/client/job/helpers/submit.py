@@ -38,7 +38,7 @@ def generate_job_manager_task(core_job_operations, job, application_tasks):
             container_name=job.id,
             application_name=application.name + ".yaml",
             file_path=application.name + ".yaml",
-            content=yaml.dump(task),
+            content=yaml.dump(task, default_flow_style=None),
             blob_client=core_job_operations.blob_client,
         )
         resource_files.append(task_definition_resource_file)

@@ -352,7 +352,7 @@ def format_batch_exception(batch_exception):
 
 def save_cluster_config(cluster_config, blob_client):
     blob_path = "config.yaml"
-    content = yaml.dump(cluster_config)
+    content = yaml.dump(cluster_config, default_flow_style=None)
     container_name = cluster_config.cluster_id
     blob_client.create_container(container_name, fail_on_exist=False)
     blob_client.create_blob_from_text(container_name, blob_path, content)
