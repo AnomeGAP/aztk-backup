@@ -95,7 +95,7 @@ class SshConfig:
 
         with open(path, "r", encoding="UTF-8") as stream:
             try:
-                config = yaml.load(stream)
+                config = yaml.load(stream, Loader=yaml.FullLoader)
             except yaml.YAMLError as err:
                 raise aztk.error.AztkError("Error in ssh.yaml: {0}".format(err))
 
@@ -245,7 +245,7 @@ class JobConfig:
 
         with open(path, "r", encoding="UTF-8") as stream:
             try:
-                config = yaml.load(stream)
+                config = yaml.load(stream, Loader=yaml.FullLoader)
             except yaml.YAMLError as err:
                 raise aztk.error.AztkError("Error in job.yaml: {0}".format(err))
 
