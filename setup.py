@@ -47,7 +47,7 @@ setup(
         "azure-storage-blob~=1.3.1",
         "azure-cosmosdb-table~=1.0.5",
         "pycryptodomex~=3.6.6",
-        "PyYAML~=3.13",
+        "PyYAML~=5.3",
         "paramiko~=2.4.2",
     ],
     package_data={

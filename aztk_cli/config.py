@@ -37,7 +37,7 @@ def _load_config_file(path: str):
 
     with open(path, "r", encoding="UTF-8") as stream:
         try:
-            return yaml.load(stream)
+            return yaml.load(stream, Loader=yaml.FullLoader)
         except yaml.YAMLError as err:
             raise aztk.error.AztkError("Error in {0}:\n {1}".format(path, err))
 

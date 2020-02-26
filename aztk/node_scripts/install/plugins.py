@@ -15,7 +15,7 @@ def _read_manifest_file(path=None):
     else:
         with open(path, "r", encoding="UTF-8") as stream:
             try:
-                return yaml.load(stream)
+                return yaml.load(stream, Loader=yaml.FullLoader)
             except json.JSONDecodeError as err:
                 print("Error in plugins manifest: {0}".format(err))
 

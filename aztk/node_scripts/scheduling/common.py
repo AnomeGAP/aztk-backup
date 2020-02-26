@@ -15,7 +15,7 @@ def load_application(application_file_path):
         Read and parse the application from file
     """
     with open(application_file_path, encoding="UTF-8") as f:
-        application = yaml.load(f)
+        application = yaml.load(f, Loader=yaml.FullLoader)
     return application
 
 
@@ -98,4 +98,4 @@ def upload_error_log(error, application_file_path):
 def download_task_definition(task_sas_url):
     response = scheduling_target.http_request_wrapper(requests.get, task_sas_url, timeout=10)
     yaml_serialized_task = response.content
-    return yaml.load(yaml_serialized_task)
+    return yaml.load(yaml_serialized_task, Loader=yaml.FullLoader)
