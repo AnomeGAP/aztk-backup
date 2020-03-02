@@ -148,6 +148,8 @@ main () {
     python3 -m pip install virtualenv=="20.0.0"
     # ensure these packages (pip, pipenv) are compatibile before upgrading
     python3 -m pip install pip=="18.0" pipenv=="2018.7.1"
+    python3 -m pip install --ignore-installed PyYAML=="5.3"
+    python3 -m pip install importlib-resources=="1.0.2"
     mkdir -p $AZTK_WORKING_DIR/.aztk-env
     cp $AZTK_WORKING_DIR/aztk/node_scripts/Pipfile $AZTK_WORKING_DIR/.aztk-env
     cp $AZTK_WORKING_DIR/aztk/node_scripts/Pipfile.lock $AZTK_WORKING_DIR/.aztk-env
