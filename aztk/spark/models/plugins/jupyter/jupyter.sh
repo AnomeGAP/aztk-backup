@@ -14,8 +14,10 @@ if  [ "$AZTK_IS_MASTER" = "true" ]; then
     pip install jupyter --upgrade
     pip install notebook --upgrade
     
-    PYSPARK_DRIVER_PYTHON="/opt/conda/bin/jupyter"
-    JUPYTER_KERNELS="/opt/conda/share/jupyter/kernels"
+    #PYSPARK_DRIVER_PYTHON="/opt/conda/bin/jupyter"
+    #JUPYTER_KERNELS="/opt/conda/share/jupyter/kernels"
+    export PYSPARK_DRIVER_PYTHON="/usr/local/bin/jupyter"
+    export JUPYTER_KERNELS="/usr/local/share/jupyter/kernels"
 
     # disable password/token on jupyter notebook
     jupyter notebook --generate-config --allow-root
