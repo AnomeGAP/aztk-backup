@@ -1,5 +1,6 @@
 from .hdfs import HDFSPlugin
 from .jupyter import JupyterPlugin
+from .jupyteratgenomix import JupyterAtgenomixPlugin
 from .jupyter_lab import JupyterLabPlugin
 from .resource_monitor import ResourceMonitorPlugin
 from .rstudio_server import RStudioServerPlugin
