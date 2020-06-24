@@ -65,3 +65,11 @@ AZTK_CLUSTER_CONFIG_METADATA_KEY = "_aztk_cluster_config"
 
 TASK_WORKING_DIR = "wd"
 SPARK_SUBMIT_LOGS_FILE = "output.log"
+
+"""
+    Batch Insights
+    currently these settings are for sponsorship subscription and the resource group is aztk
+"""
+APP_INSIGHTS_INSTRUMENTATION_KEY = "bc66c47a-d4d8-4393-a51b-0879ce72e0fd"
+APP_INSIGHTS_APP_ID = "abd86d34-0868-4f97-9dfc-4518035fc7ff"
+BATCH_INSIGHTS_DOWNLOAD_URL = "https://github.com/Azure/batch-insights/releases/download/v1.3.0/batch-insights"

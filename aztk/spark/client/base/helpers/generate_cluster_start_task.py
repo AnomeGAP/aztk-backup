@@ -93,6 +93,7 @@ def __cluster_install_cmd(
             docker_repo,
             "" if docker_run_options is None else docker_run_options.replace('"', '\\"'),
         ),
+        "wget -O - https://raw.githubusercontent.com/Azure/batch-insights/master/scripts/run-linux.sh | bash"
     ]
 
     commands = shares + setup
@@ -124,6 +125,10 @@ def generate_cluster_start_task(
     spark_container_name = constants.DOCKER_SPARK_CONTAINER_NAME
     spark_submit_logs_file = constants.SPARK_SUBMIT_LOGS_FILE
 
+    app_insights_instrumentation_key = constants.APP_INSIGHTS_INSTRUMENTATION_KEY
+    app_insights_app_id = constants.APP_INSIGHTS_APP_ID
+    batch_insights_download_url = constants.BATCH_INSIGHTS_DOWNLOAD_URL
+
     # TODO use certificate
     environment_settings = (__get_secrets_env(core_base_operations) + [
         batch_models.EnvironmentSetting(name="SPARK_WEB_UI_PORT", value=spark_web_ui_port),
@@ -132,6 +137,9 @@ def generate_cluster_start_task(
         batch_models.EnvironmentSetting(name="SPARK_CONTAINER_NAME", value=spark_container_name),
         batch_models.EnvironmentSetting(name="SPARK_SUBMIT_LOGS_FILE", value=spark_submit_logs_file),
         batch_models.EnvironmentSetting(name="AZTK_GPU_ENABLED", value=helpers.bool_env(gpu_enabled)),
+        batch_models.EnvironmentSetting(name="APP_INSIGHTS_INSTRUMENTATION_KEY", value=app_insights_instrumentation_key),
+        batch_models.EnvironmentSetting(name="APP_INSIGHTS_APP_ID", value=app_insights_app_id),
+        batch_models.EnvironmentSetting(name="BATCH_INSIGHTS_DOWNLOAD_URL", value=batch_insights_download_url),
     ] + __get_docker_credentials(core_base_operations) + _get_aztk_environment(cluster_id, worker_on_master,
                                                                                mixed_mode))
 
