@@ -26,7 +26,7 @@ if  [ "$AZTK_IS_MASTER" = "true" ]; then
     echo -e 'c.NotebookApp.token=""' >> $JUPYTER_CONFIG
     echo -e 'c.NotebookApp.password="sha1:9bb8f81a031d:fad75863b765f2f51d9db5d3d7654e3d5640fd18"' >> $JUPYTER_CONFIG
     echo -e 'c.NotebookApp.allow_remote_access=True' >> $JUPYTER_CONFIG
-    echo -e 'c.NotebookApp.base_url="/ipython/" >> $JUPYTER_CONFIG
+    echo -e 'c.NotebookApp.base_url="/ipython/"' >> $JUPYTER_CONFIG
 
     # get master ip
     MASTER_IP=$(hostname -i)
