@@ -28,7 +28,7 @@ if  [ "$AZTK_IS_MASTER" = "true" ]; then
     echo -e 'c.NotebookApp.allow_remote_access=True' >> $JUPYTER_CONFIG
     echo -e 'c.NotebookApp.base_url="/notebook/"' >> $JUPYTER_CONFIG
     echo -e 'c.NotebookApp.trust_xheaders=True' >> $JUPYTER_CONFIG
-    echo -e 'c.NotebookApp.allow_origin='*' >> $JUPYTER_CONFIG
+    echo -e 'c.NotebookApp.allow_origin="*"' >> $JUPYTER_CONFIG
 
     # get master ip
     MASTER_IP=$(hostname -i)
