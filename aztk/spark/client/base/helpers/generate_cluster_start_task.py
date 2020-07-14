@@ -93,7 +93,7 @@ def __cluster_install_cmd(
             docker_repo,
             "" if docker_run_options is None else docker_run_options.replace('"', '\\"'),
         ),
-        "wget -O - https://raw.githubusercontent.com/Azure/batch-insights/master/scripts/run-linux.sh | bash"
+        "timeout 3m wget -O - https://raw.githubusercontent.com/Azure/batch-insights/master/scripts/run-linux.sh | bash"
     ]
 
     commands = shares + setup
