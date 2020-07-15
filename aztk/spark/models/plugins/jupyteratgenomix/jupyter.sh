@@ -59,7 +59,7 @@ if  [ "$AZTK_IS_MASTER" = "true" ]; then
 EOF
 
     # start jupyter notebook from /mnt - this is where we recommend you put your azure files mount point as well
-    cd /mnt
+    cd /notebook
     (PYSPARK_DRIVER_PYTHON=$PYSPARK_DRIVER_PYTHON PYSPARK_DRIVER_PYTHON_OPTS="notebook --no-browser --port=8888 --allow-root" pyspark &)
 fi
 
