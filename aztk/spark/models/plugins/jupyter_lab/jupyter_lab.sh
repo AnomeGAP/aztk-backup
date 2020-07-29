@@ -9,15 +9,22 @@
 if  [ "$AZTK_IS_MASTER" = "true" ]; then
     conda install -c conda-force jupyterlab
 
-    PYSPARK_DRIVER_PYTHON="/opt/conda/bin/jupyter"
-    JUPYTER_KERNELS="/opt/conda/share/jupyter/kernels"
+    #PYSPARK_DRIVER_PYTHON="/opt/conda/bin/jupyter"
+    #JUPYTER_KERNELS="/opt/conda/share/jupyter/kernels"
+    export PYSPARK_DRIVER_PYTHON="/usr/local/bin/jupyter"
+    export JUPYTER_KERNELS="/usr/local/share/jupyter/kernels"
 
     # disable password/token on jupyter notebook
     jupyter lab --generate-config --allow-root
-    JUPYTER_CONFIG='/root/.jupyter/jupyter_notebook_config.py'
+    JUPYTER_CONFIG='/root/.jupyter/jupyter_lab_config.py'
     echo >> $JUPYTER_CONFIG
-    echo -e 'c.NotebookApp.token=""' >> $JUPYTER_CONFIG
-    echo -e 'c.NotebookApp.password=""' >> $JUPYTER_CONFIG
+    #echo -e 'c.NotebookApp.token=""' >> $JUPYTER_CONFIG
+    #echo -e 'c.NotebookApp.password=""' >> $JUPYTER_CONFIG
+    echo -e 'c.NotebookApp.allow_remote_access=True' >> $JUPYTER_CONFIG
+    echo -e 'c.NotebookApp.base_url="/lab/"' >> $JUPYTER_CONFIG
+    echo -e 'c.NotebookApp.trust_xheaders=True' >> $JUPYTER_CONFIG
+    echo -e 'c.NotebookApp.allow_origin="*"' >> $JUPYTER_CONFIG
+
 
     # get master ip
     MASTER_IP=$(hostname -i)
@@ -49,7 +56,11 @@ EOF
 
     # start jupyter notebook from /mnt - this is where we recommend you put your azure files mount point as well
     cd /mnt
-    (PYSPARK_DRIVER_PYTHON=$PYSPARK_DRIVER_PYTHON PYSPARK_DRIVER_PYTHON_OPTS="lab --no-browser --port=8889 --allow-root" pyspark &)
+    (PYSPARK_DRIVER_PYTHON=$PYSPARK_DRIVER_PYTHON PYSPARK_DRIVER_PYTHON_OPTS="lab --no-browser --port=8889 --allow-root \
+	--NotebookApp.contents_manager_class='hdfscontents.hdfsmanager.HDFSContentsManager' \
+	--HDFSContentsManager.hdfs_namenode_host='default' \
+	--HDFSContentsManager.hdfs_namenode_port=0 \
+	--HDFSContentsManager.root_dir='/'" pyspark &)
 fi
 
 
