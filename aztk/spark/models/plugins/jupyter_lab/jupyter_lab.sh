@@ -7,7 +7,6 @@
 #  - aztk/python:spark2.1.0-python3.6.2-gpu
 
 if  [ "$AZTK_IS_MASTER" = "true" ]; then
-    conda install -c conda-force jupyterlab
 
     #PYSPARK_DRIVER_PYTHON="/opt/conda/bin/jupyter"
     #JUPYTER_KERNELS="/opt/conda/share/jupyter/kernels"
@@ -16,7 +15,7 @@ if  [ "$AZTK_IS_MASTER" = "true" ]; then
 
     # disable password/token on jupyter notebook
     jupyter lab --generate-config --allow-root
-    JUPYTER_CONFIG='/root/.jupyter/jupyter_lab_config.py'
+    JUPYTER_CONFIG='/root/.jupyter/jupyter_notebook_config.py'
     echo >> $JUPYTER_CONFIG
     #echo -e 'c.NotebookApp.token=""' >> $JUPYTER_CONFIG
     #echo -e 'c.NotebookApp.password=""' >> $JUPYTER_CONFIG
