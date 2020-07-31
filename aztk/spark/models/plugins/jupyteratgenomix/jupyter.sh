@@ -20,15 +20,11 @@ if  [ "$AZTK_IS_MASTER" = "true" ]; then
     export JUPYTER_KERNELS="/usr/local/share/jupyter/kernels"
 
     # disable password/token on jupyter notebook
-    jupyter notebook --generate-config --allow-root
-    JUPYTER_CONFIG='/root/.jupyter/jupyter_notebook_config.py'
-    echo >> $JUPYTER_CONFIG
+    #jupyter notebook --generate-config --allow-root
+    #JUPYTER_CONFIG='/root/.jupyter/jupyter_notebook_config.py'
+    #echo >> $JUPYTER_CONFIG
     #echo -e 'c.NotebookApp.token=""' >> $JUPYTER_CONFIG
     #echo -e 'c.NotebookApp.password="sha1:9bb8f81a031d:fad75863b765f2f51d9db5d3d7654e3d5640fd18"' >> $JUPYTER_CONFIG
-    echo -e 'c.NotebookApp.allow_remote_access=True' >> $JUPYTER_CONFIG
-    echo -e 'c.NotebookApp.base_url="/notebook/"' >> $JUPYTER_CONFIG
-    echo -e 'c.NotebookApp.trust_xheaders=True' >> $JUPYTER_CONFIG
-    echo -e 'c.NotebookApp.allow_origin="*"' >> $JUPYTER_CONFIG
 
     # get master ip
     MASTER_IP=$(hostname -i)
@@ -60,7 +56,11 @@ EOF
 
     # start jupyter notebook from /mnt - this is where we recommend you put your azure files mount point as well
     cd /notebook
-    (PYSPARK_DRIVER_PYTHON=$PYSPARK_DRIVER_PYTHON PYSPARK_DRIVER_PYTHON_OPTS="notebook --no-browser --port=8888 --allow-root" pyspark &)
+    (PYSPARK_DRIVER_PYTHON=$PYSPARK_DRIVER_PYTHON PYSPARK_DRIVER_PYTHON_OPTS="notebook --no-browser --port=8888 --allow-root \
+    --NotebookApp.allow_remote_access=True \
+    --NotebookApp.base_url='/notebook/' \
+    --NotebookApp.trust_xheaders=True \
+    --NotebookApp.allow_origin='*'" pyspark &)
 fi
 
 
