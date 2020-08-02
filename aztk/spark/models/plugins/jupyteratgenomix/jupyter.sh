@@ -62,7 +62,11 @@ EOF
     --NotebookApp.allow_remote_access=True \
     --NotebookApp.base_url='/notebook/' \
     --NotebookApp.trust_xheaders=True \
-    --NotebookApp.allow_origin='*'" pyspark &)
+    --NotebookApp.allow_origin='*' \
+    --NotebookApp.contents_manager_class='hdfscontents.hdfsmanager.HDFSContentsManager' \
+    --HDFSContentsManager.hdfs_namenode_host='default' \
+    --HDFSContentsManager.hdfs_namenode_port=0 \
+    --HDFSContentsManager.root_dir='/seqslab/usr/$BLOB_CONTAINER/notebook'" pyspark &)
 fi
 
 
