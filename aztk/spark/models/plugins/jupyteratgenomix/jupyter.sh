@@ -18,6 +18,8 @@ if  [ "$AZTK_IS_MASTER" = "true" ]; then
     #JUPYTER_KERNELS="/opt/conda/share/jupyter/kernels"
     export PYSPARK_DRIVER_PYTHON="/usr/local/bin/jupyter"
     export JUPYTER_KERNELS="/usr/local/share/jupyter/kernels"
+    export HADOOP_HOME="/usr/local/hadoop"
+    export PATH=$PATH":$HADOOP_HOME/bin"
 
     # disable password/token on jupyter notebook
     #jupyter notebook --generate-config --allow-root

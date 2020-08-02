@@ -6,15 +6,14 @@
 #  - aztk/python:spark2.1.0-python3.6.2-base
 #  - aztk/python:spark2.1.0-python3.6.2-gpu
 
-printenv | sort
-which hadoop
-
 if  [ "$AZTK_IS_MASTER" = "true" ]; then
 
     #PYSPARK_DRIVER_PYTHON="/opt/conda/bin/jupyter"
     #JUPYTER_KERNELS="/opt/conda/share/jupyter/kernels"
     export PYSPARK_DRIVER_PYTHON="/usr/local/bin/jupyter"
     export JUPYTER_KERNELS="/usr/local/share/jupyter/kernels"
+    export HADOOP_HOME="/usr/local/hadoop"
+    export PATH=$PATH":$HADOOP_HOME/bin"
 
     # disable password/token on jupyter notebook
     #jupyter lab --generate-config --allow-root
