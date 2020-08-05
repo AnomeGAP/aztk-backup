@@ -22,11 +22,15 @@ if  [ "$AZTK_IS_MASTER" = "true" ]; then
     export PATH=$PATH":$HADOOP_HOME/bin"
 
     # disable password/token on jupyter notebook
-    #jupyter notebook --generate-config --allow-root
-    #JUPYTER_CONFIG='/root/.jupyter/jupyter_notebook_config.py'
-    #echo >> $JUPYTER_CONFIG
-    #echo -e 'c.NotebookApp.token=""' >> $JUPYTER_CONFIG
-    #echo -e 'c.NotebookApp.password="sha1:9bb8f81a031d:fad75863b765f2f51d9db5d3d7654e3d5640fd18"' >> $JUPYTER_CONFIG
+    jupyter notebook --generate-config --allow-root
+    JUPYTER_CONFIG='/root/.jupyter/jupyter_notebook_config.py'
+    echo >> $JUPYTER_CONFIG
+    echo -e "c.NotebookApp.tornado_settings={
+  	'headers':{
+    		'Content-Security-Policy': \"frame-ancestors *;\"
+  	}
+    }" >> $JUPYTER_CONFIG
+
 
     # get master ip
     MASTER_IP=$(hostname -i)
