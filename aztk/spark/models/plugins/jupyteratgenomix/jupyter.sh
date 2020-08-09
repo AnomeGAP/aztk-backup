@@ -67,6 +67,7 @@ EOF
     --NotebookApp.base_url='/notebook/' \
     --NotebookApp.trust_xheaders=True \
     --NotebookApp.allow_origin='*' \
+    --NotebookApp.quit_button=False \
     --NotebookApp.contents_manager_class='hdfscontents.hdfsmanager.HDFSContentsManager' \
     --HDFSContentsManager.hdfs_namenode_host='default' \
     --HDFSContentsManager.hdfs_namenode_port=0 \
