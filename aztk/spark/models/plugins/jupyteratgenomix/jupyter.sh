@@ -36,7 +36,10 @@ Morsel._reserved[str('samesite')] = str('SameSite')" >> $JUPYTER_CONFIG
     	'Content-Security-Policy': \"frame-ancestors *;\"
     }
 }" >> $JUPYTER_CONFIG
-
+    echo -e "c.NotebookApp.cookie_options={
+    'SameSite': 'None',
+    'Secure': True
+}" >> $JUPYTER_CONFIG
 
     # get master ip
     MASTER_IP=$(hostname -i)
