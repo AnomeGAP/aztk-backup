@@ -40,6 +40,8 @@ Morsel._reserved[str('samesite')] = str('SameSite')" >> $JUPYTER_CONFIG
     'SameSite': 'None',
     'Secure': True
 }" >> $JUPYTER_CONFIG
+    echo -e "c.NotebookApp.disable_check_xsrf = True" >> $JUPYTER_CONFIG
+
 
     # get master ip
     MASTER_IP=$(hostname -i)
