@@ -25,6 +25,12 @@ if  [ "$AZTK_IS_MASTER" = "true" ]; then
     jupyter notebook --generate-config --allow-root
     JUPYTER_CONFIG='/root/.jupyter/jupyter_notebook_config.py'
     echo >> $JUPYTER_CONFIG
+    echo -e "try:
+    from http.cookies import Morsel
+except ImportError:
+    from Cookie import Morsel
+
+Morsel._reserved[str('samesite')] = str('SameSite')" >> $JUPYTER_CONFIG
     echo -e "c.NotebookApp.tornado_settings={
     'headers':{
     	'Content-Security-Policy': \"frame-ancestors *;\"
@@ -55,7 +61,7 @@ if  [ "$AZTK_IS_MASTER" = "true" ]; then
     "env": {
         "SPARK_HOME": "$SPARK_HOME",
         "PYSPARK_PYTHON": "python",
-        "PYSPARK_SUBMIT_ARGS": "--master spark://$AZTK_MASTER_IP:7077 pyspark-shell"
+        "PYSPARK_SUBMIT_ARGS": "--master spark://$AZTK_MASTER_IP:7077 --driver-memory 8G --executor-memory 6G pyspark-shell"
     }
 }
 EOF

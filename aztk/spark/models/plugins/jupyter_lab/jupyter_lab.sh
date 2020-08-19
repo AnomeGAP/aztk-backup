@@ -45,7 +45,7 @@ if  [ "$AZTK_IS_MASTER" = "true" ]; then
     "env": {
         "SPARK_HOME": "$SPARK_HOME",
         "PYSPARK_PYTHON": "python",
-        "PYSPARK_SUBMIT_ARGS": "--master spark://$MASTER_IP:7077 pyspark-shell"
+        "PYSPARK_SUBMIT_ARGS": "--master spark://$MASTER_IP:7077 --driver-memory 8G --executor-memory 6G pyspark-shell"
     }
 }
 EOF
