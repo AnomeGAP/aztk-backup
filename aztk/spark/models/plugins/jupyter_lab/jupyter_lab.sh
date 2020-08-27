@@ -61,7 +61,7 @@ EOF
         --NotebookApp.contents_manager_class='hdfscontents.hdfsmanager.HDFSContentsManager' \
 	--HDFSContentsManager.hdfs_namenode_host='default' \
 	--HDFSContentsManager.hdfs_namenode_port=0 \
-	--HDFSContentsManager.root_dir='/seqslab/usr/$USER_ID/notebook'" pyspark &)
+	--HDFSContentsManager.root_dir='/seqslab/usr/$SEQSLAB_USER/notebook'" pyspark &)
 fi
 
 
