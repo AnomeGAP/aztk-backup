@@ -107,7 +107,7 @@ def submit_job(core_job_operations,
 
         software_metadata_key = base_models.Software.spark
 
-        vm_image = models.VmImage(publisher="Canonical", offer="UbuntuServer", sku="16.04")
+        vm_image = models.VmImage(publisher="Canonical", offer="UbuntuServer", sku="20.04")
 
         autoscale_formula = "$TargetDedicatedNodes = {0}; " "$TargetLowPriorityNodes = {1}".format(
             job_configuration.max_dedicated_nodes, job_configuration.max_low_pri_nodes)
