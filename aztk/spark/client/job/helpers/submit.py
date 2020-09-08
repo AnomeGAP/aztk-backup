@@ -77,6 +77,7 @@ def _apply_default_for_job_config(job_conf: models.JobConfiguration):
 def submit_job(core_job_operations,
                spark_job_operations,
                job_configuration: models.JobConfiguration,
+               vm_image: base_models.VmImage,
                wait: bool = False):
     try:
         job_configuration = _apply_default_for_job_config(job_configuration)
@@ -106,8 +107,6 @@ def submit_job(core_job_operations,
         job_manager_task = generate_job_manager_task(core_job_operations, job_configuration, application_tasks)
 
         software_metadata_key = base_models.Software.spark
-
-        vm_image = models.VmImage(publisher="Canonical", offer="UbuntuServer", sku="16.04")
 
         autoscale_formula = "$TargetDedicatedNodes = {0}; " "$TargetLowPriorityNodes = {1}".format(
             job_configuration.max_dedicated_nodes, job_configuration.max_low_pri_nodes)

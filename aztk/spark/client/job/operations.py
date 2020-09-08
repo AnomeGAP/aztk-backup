@@ -106,7 +106,7 @@ class JobOperations(SparkBaseOperations):
         """
         return stop_application.stop_app(self._core_job_operations, id, application_name)
 
-    def submit(self, job_configuration: models.JobConfiguration, wait: bool = False):
+    def submit(self, job_configuration: models.JobConfiguration, vm_os_ver, wait: bool = False):
         """Submit a job
 
         Jobs are a cluster definition and one or many application definitions which run on the cluster. The job's
@@ -115,12 +115,14 @@ class JobOperations(SparkBaseOperations):
 
         Args:
             job_configuration (:obj:`aztk.spark.models.JobConfiguration`): Model defining the job's configuration.
+            vm_os_ver (:obj:`string`): ubuntu vm os version, possible values: 16.04|18.04
             wait (:obj:`bool`): If True, blocks until job is completed. Defaults to False.
 
         Returns:
             :obj:`aztk.spark.models.Job`: Model representing the state of the job.
         """
-        return submit.submit_job(self._core_job_operations, self, job_configuration, wait)
+        vm_image = models.VmImage(publisher="Canonical", offer="UbuntuServer", sku=vm_os_ver)
+        return submit.submit_job(self._core_job_operations, self, job_configuration, vm_image, wait)
 
     def wait(self, id):
         """Wait until the job has completed.

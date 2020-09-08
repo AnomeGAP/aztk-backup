@@ -20,6 +20,11 @@ def setup_parser(parser: argparse.ArgumentParser):
         required=False,
         help="Path to the job.yaml configuration file. Defaults to .aztk/job.yaml",
     )
+    parser.add_argument(
+        "--ubuntu-os-version",
+        dest="vm_os_ver",
+        help="specify the OS version of ubuntu, 16.04|18.04"
+    )
 
 
 def execute(args: typing.NamedTuple):
@@ -53,4 +58,4 @@ def execute(args: typing.NamedTuple):
     )
 
     # TODO: utils.print_job_conf(job_configuration)
-    spark_client.job.submit(job_configuration)
+    spark_client.job.submit(job_configuration, args.vm_os_ver)
