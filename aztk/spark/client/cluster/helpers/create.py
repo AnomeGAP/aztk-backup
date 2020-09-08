@@ -28,6 +28,7 @@ def _apply_default_for_cluster_config(configuration: models.ClusterConfiguration
 def create_cluster(core_cluster_operations,
                    spark_cluster_operations,
                    cluster_conf: models.ClusterConfiguration,
+                   vm_image: base_models.VmImage,
                    wait: bool = False):
     """
     Create a new aztk spark cluster
@@ -35,6 +36,7 @@ def create_cluster(core_cluster_operations,
     Args:
         cluster_conf(aztk.spark.models.models.ClusterConfiguration): Configuration for the the cluster to be created
         wait(bool): If you should wait for the cluster to be ready before returning
+        vm_image: models for cluster vm
 
     Returns:
         :obj:`aztk.spark.models.Cluster`
@@ -63,7 +65,7 @@ def create_cluster(core_cluster_operations,
         software_metadata_key = base_models.Software.spark
 
         cluster = core_cluster_operations.create(cluster_conf, software_metadata_key, start_task,
-                                                 constants.SPARK_VM_IMAGE)
+                                                 vm_image)
 
         # Wait for the master to be ready
         if wait:

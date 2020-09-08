@@ -25,6 +25,8 @@ def setup_parser(parser: argparse.ArgumentParser):
     parser.add_argument("--no-wait", dest="wait", action="store_false")
     parser.add_argument("--wait", dest="wait", action="store_true")
     parser.set_defaults(wait=None, size=None, size_low_pri=None, size_low_priority=None)
+    parser.add_argument("--ubuntu-os-version", dest="vm_os_ver",
+                        help="specify the OS version of ubuntu, 16.04|18.04")
 
 
 def execute(args: typing.NamedTuple):
@@ -72,7 +74,7 @@ def execute(args: typing.NamedTuple):
     utils.print_cluster_conf(cluster_conf, wait)
     with utils.Spinner():
         # create spark cluster
-        cluster = spark_client.cluster.create(cluster_configuration=cluster_conf, wait=wait)
+        cluster = spark_client.cluster.create(cluster_configuration=cluster_conf, vm_version=args.vm_os_ver, wait=wait)
 
     if wait:
         log.info("Cluster %s created successfully.", cluster.id)
