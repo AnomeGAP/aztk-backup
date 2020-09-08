@@ -25,7 +25,7 @@ def setup_parser(parser: argparse.ArgumentParser):
     parser.add_argument("--no-wait", dest="wait", action="store_false")
     parser.add_argument("--wait", dest="wait", action="store_true")
     parser.set_defaults(wait=None, size=None, size_low_pri=None, size_low_priority=None)
-    parser.add_argument("--ubuntu-os-version", dest="vm_os_ver",
+    parser.add_argument("--ubuntu-os-version", dest="vm_os_ver", default='16.04',
                         help="specify the OS version of ubuntu, 16.04|18.04")
 
 

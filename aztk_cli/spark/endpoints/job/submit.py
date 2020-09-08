@@ -22,6 +22,7 @@ def setup_parser(parser: argparse.ArgumentParser):
     )
     parser.add_argument(
         "--ubuntu-os-version",
+        default='16.04',
         dest="vm_os_ver",
         help="specify the OS version of ubuntu, 16.04|18.04"
     )

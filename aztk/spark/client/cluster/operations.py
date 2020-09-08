@@ -19,11 +19,11 @@ class ClusterOperations(SparkBaseOperations):
         self._core_cluster_operations = CoreClusterOperations(context)
         # self._spark_base_cluster_operations = SparkBaseOperations()
 
-    def create(self, cluster_configuration: models.ClusterConfiguration, vm_ver = "16.04", wait: bool = False):
+    def create(self, cluster_configuration: models.ClusterConfiguration, vm_ver, wait: bool = False):
         """Create a cluster.
 
         Args:
-            vm_ver: (:obj:`string`) ubuntu vm version, default as 16.04
+            vm_ver: (:obj:`string`) ubuntu vm version
             cluster_configuration (:obj:`ClusterConfiguration`): Configuration for the cluster to be created.
             wait (:obj:`bool`): if True, this function will block until the cluster creation is finished.
 
