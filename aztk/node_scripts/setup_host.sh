@@ -15,8 +15,17 @@ docker_run_options=$3
 install_prerequisites () {
     echo "Installing pre-reqs"
 
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    echo "start install docker-ce"
+    curl https://get.docker.com | sh
+    sudo systemctl start docker && sudo systemctl enable docker
+    echo "finish install docker-ce"
+
+    echo "Setup the stable repository and the GPG key"
+    distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+    echo "the install url=https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list"
+    curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+    curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+
 
     packages=(
         apt-transport-https
@@ -25,17 +34,41 @@ install_prerequisites () {
         software-properties-common
         python3-pip
         python3-venv
-        docker-ce
     )
-
     echo "running apt-get install -y --no-install-recommends \"${packages[@]}\""
     apt-get -y update &&
     apt-get install -y --no-install-recommends "${packages[@]}"
 
+
     if [ $AZTK_GPU_ENABLED == "true" ]; then
-        apt-get install -y nvidia-384 nvidia-modprobe
-        wget -P /tmp https://github.com/NVIDIA/nvidia-docker/releases/download/v1.0.1/nvidia-docker_1.0.1-1_amd64.deb
-        sudo dpkg -i /tmp/nvidia-docker*.deb && rm /tmp/nvidia-docker*.deb
+        echo "start install cuda10.0-"
+        CUDA_DEB=cuda-repo-ubuntu1804_10.0.130-1_amd64.deb
+        curl -O http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/$CUDA_DEB
+        sudo apt-key adv --fetch-keys http://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/7fa2af80.pub
+        sudo dpkg -i --force-overwrite ./$CUDA_DEB
+        sudo apt-get -y update
+        sudo apt-get -y install cuda-10-0
+        echo "finish install cuda10.0-"
+
+        echo "start install cudnn7.6.0.64"
+        CUDNN_TAR_FILE="cudnn-10.0-linux-x64-v7.6.0.64.tgz"
+        wget -q https://developer.download.nvidia.com/compute/redist/cudnn/v7.6.0/${CUDNN_TAR_FILE}
+        tar -xzvf ${CUDNN_TAR_FILE}
+        sudo cp -P cuda/include/cudnn.h /usr/local/cuda-10.0/include
+        sudo cp -P cuda/lib64/libcudnn* /usr/local/cuda-10.0/lib64/
+        sudo chmod a+r /usr/local/cuda-10.0/lib64/libcudnn*
+        sudo ldconfig
+        echo "finish install cudnn7.6.0.64"
+
+        echo "start install nvidia-docker2"
+        sudo apt-get update
+        sudo apt-get install -y nvidia-docker2
+        echo "finish install nvidia-docker2"
+
+
+        echo "start restart docker"
+        sudo systemctl restart docker
+        echo "finish restart docker"
     fi
     echo "Finished installing pre-reqs"
 }
@@ -165,6 +198,7 @@ main () {
     time(
         run_docker_container
     ) 2>&1
+
 }
 
 apt-mark hold $(uname -r)
