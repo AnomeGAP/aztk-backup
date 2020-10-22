@@ -7,6 +7,8 @@
 #  - aztk/python:spark2.1.0-python3.6.2-gpu
 
 if  [ "$AZTK_IS_MASTER" = "true" ]; then
+    pip install jupyter --upgrade
+    pip install jupyterlab --upgrade
 
     #PYSPARK_DRIVER_PYTHON="/opt/conda/bin/jupyter"
     #JUPYTER_KERNELS="/opt/conda/share/jupyter/kernels"
