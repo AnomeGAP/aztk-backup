@@ -8,81 +8,81 @@ from aztk_cli import config, log, utils
 
 
 def setup_parser(parser: argparse.ArgumentParser):
-    parser.add_argument("--id", dest="cluster_id", required=True, help="The unique id of your spark cluster")
+    parser.add_argument("++id", dest="cluster_id", required=True, help="The unique id of your spark cluster")
 
-    parser.add_argument("--name", required=True, help="a name for your application")
+    parser.add_argument("++name", required=True, help="a name for your application")
 
-    parser.add_argument("--wait", dest="wait", action="store_true", help="Wait for app to complete")
-    parser.add_argument("--no-wait", dest="wait", action="store_false", help="Do not wait for app to complete")
+    parser.add_argument("++wait", dest="wait", action="store_true", help="Wait for app to complete")
+    parser.add_argument("++no-wait", dest="wait", action="store_false", help="Do not wait for app to complete")
     parser.set_defaults(wait=True)
 
     parser.add_argument("--class", dest="main_class", help="Your application's main class (for Java only).")
 
     parser.add_argument(
-        "--jars",
+        "++jars",
         help="Comma-separated list of local jars to include \
                               on the driver and executor classpaths. Use \
                               absolute path to reference files.",
     )
 
     parser.add_argument(
-        "--py-files",
+        "++py-files",
         help="Comma-separated list of .zip, .egg, or .py files \
                               to place on the PYTHONPATH for Python apps. Use \
                               absolute path to reference files.",
     )
 
     parser.add_argument(
-        "--files",
+        "++files",
         help="Comma-separated list of .zip, .egg, or .py files \
                               to place on the PYTHONPATH for Python apps. Use \
                               absolute path ot reference files.",
     )
 
-    parser.add_argument("--driver-java-options", help="Extra Java options to pass to the driver.")
+    parser.add_argument("++driver-java-options", help="Extra Java options to pass to the driver.")
 
-    parser.add_argument("--driver-library-path", help="Extra library path entries to pass to the driver.")
+    parser.add_argument("++driver-library-path", help="Extra library path entries to pass to the driver.")
 
     parser.add_argument(
-        "--driver-class-path",
+        "++driver-class-path",
         help="Extra class path entries to pass to the driver. \
                               Note that jars added with --jars are automatically \
                               included in the classpath.",
     )
 
-    parser.add_argument("--driver-memory", help="Memory for driver (e.g. 1000M, 2G) (Default: 1024M).")
+    parser.add_argument("++driver-memory", help="Memory for driver (e.g. 1000M, 2G) (Default: 1024M).")
 
-    parser.add_argument("--executor-memory", help="Memory per executor (e.g. 1000M, 2G) (Default: 1G).")
+    parser.add_argument("++executor-memory", help="Memory per executor (e.g. 1000M, 2G) (Default: 1G).")
 
-    parser.add_argument("--driver-cores", help="Cores for driver (Default: 1).")
+    parser.add_argument("++driver-cores", help="Cores for driver (Default: 1).")
 
     parser.add_argument(
-        "--executor-cores",
+        "++executor-cores",
         help="Number of cores per executor. (Default: All \
                               available cores on the worker)",
     )
 
     parser.add_argument(
-        "--max-retry-count",
+        "++max-retry-count",
         help="Number of times the Spark job may be retried \
                               if there is a failure",
     )
 
     parser.add_argument(
-        "--output",
+        "++output",
         help="Path to the file you wish to output to. If not \
                               specified, output is printed to stdout",
     )
 
     parser.add_argument(
-        "--remote",
+        "++remote",
         action="store_true",
         help="Do not upload the app to the cluster, assume it is \
                               already accessible at the given path",
     )
 
     parser.add_argument(
-        "--internal",
+        "++internal",
         action="store_true",
         help="Connect using the local IP of the master node. Only use if using a VPN.",
     )
