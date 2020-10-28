@@ -44,7 +44,9 @@ install_prerequisites () {
         echo "start install nvidia-driver"
         sudo add-apt-repository ppa:graphics-drivers/ppa
         sudo apt-get update
-        sudo apt-get install -y nvidia-driver-418
+        sudo apt install -y xserver-xorg-video-nvidia-418-server
+        sudo apt install -y libnvidia-cfg1-418-server
+        sudo apt install -y nvidia-driver-418-server
         echo "finish install nvidia-driver"
 
         echo "start install nvidia-docker2"
@@ -170,7 +172,7 @@ main () {
     DIFF=$(( $END1 - $START1 ))
     sec=$(($DIFF % $SIXTY))
     min=$(( $(( $DIFF - $sec )) / $SIXTY ))
-    echo "install_perrequisites total: $min min $sec sec"
+    echo "Install_perrequisites(include GPU) total: $min min $sec sec"
     # set hostname in /etc/hosts if dns cannot resolve
     if ! host $HOSTNAME ; then
         echo $(hostname -I | awk '{print $1}') $HOSTNAME >> /etc/hosts
@@ -218,5 +220,5 @@ ENDm=$(date +%s)
 DIFF=$(( $ENDm - $STARTm ))
 sec=$(($DIFF % $SIXTY))
 min=$(( $(( $DIFF - $sec )) / $SIXTY ))
-echo "AZTK execution total: $min min $sec sec"
+echo "AZTK all process execution total: $min min $sec sec"
 apt-mark unhold $(uname -r)
