@@ -16,7 +16,7 @@ def setup_parser(parser: argparse.ArgumentParser):
     parser.add_argument("++no-wait", dest="wait", action="store_false", help="Do not wait for app to complete")
     parser.set_defaults(wait=True)
 
-    parser.add_argument("--class", dest="main_class", help="Your application's main class (for Java only).")
+    parser.add_argument("++class", dest="main_class", help="Your application's main class (for Java only).")
 
     parser.add_argument(
         "++jars",
