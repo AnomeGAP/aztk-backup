@@ -27,15 +27,18 @@ def setup_parser(parser: argparse.ArgumentParser):
     parser.set_defaults(wait=None, size=None, size_low_pri=None, size_low_priority=None)
     parser.add_argument("--ubuntu-os-version", dest="vm_os_ver", default='16.04',
                         help="specify the OS version of ubuntu, 16.04|18.04")
+    parser.add_argument("--cluster-path", dest="cluster_path", help="Path of cluster.yaml", default=None)
+    parser.add_argument("--spark-conf", dest="spark_conf", help="Path of spark-default.conf", default=None)
 
 
 def execute(args: typing.NamedTuple):
     spark_client = aztk.spark.Client(config.load_aztk_secrets())
     cluster_conf = ClusterConfiguration()
-    cluster_conf.spark_configuration = load_aztk_spark_config()
+    cluster_conf.spark_configuration = load_aztk_spark_config(args.spark_conf)
 
     # read cluster.yaml configuration file, overwrite values with args
-    file_config, wait = config.read_cluster_config()
+    file_config, wait = config.read_cluster_config() if args.cluster_path is None \
+        else config.read_cluster_config(args.cluster_path)
     cluster_conf.merge(file_config)
 
     cluster_conf.merge(

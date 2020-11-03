@@ -281,9 +281,9 @@ def get_file_if_exists(file):
     return None
 
 
-def load_aztk_spark_config():
+def load_aztk_spark_config(spark_conf: str = None):
     return aztk.spark.models.SparkConfiguration(
-        spark_defaults_conf=get_file_if_exists("spark-defaults.conf"),
+        spark_defaults_conf=get_file_if_exists("spark-defaults.conf") if spark_conf is None else spark_conf,
         jars=load_jars(),
         spark_env_sh=get_file_if_exists("spark-env.sh"),
         core_site_xml=get_file_if_exists("core-site.xml"),
