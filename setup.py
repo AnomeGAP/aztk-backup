@@ -42,7 +42,7 @@ setup(
     packages=find_packages(exclude=["tests"]),
     install_requires=[
         "azure-batch~=5.1.0",
-        "azure-mgmt-batch~=5.0.1",
+        "azure-mgmt-batch~=9.0.0",
         "azure-mgmt-storage~=3.0.0",
         "azure-storage-blob~=1.3.1",
         "azure-cosmosdb-table~=1.0.5",

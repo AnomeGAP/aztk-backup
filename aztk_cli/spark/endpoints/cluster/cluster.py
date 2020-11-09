@@ -38,7 +38,7 @@ def setup_parser(parser: argparse.ArgumentParser):
     list_parser = subparsers.add_parser(ClusterAction.list, help="List clusters in your account")
     app_logs_parser = subparsers.add_parser("app-logs", help="Get the logs from a submitted app")
     ssh_parser = subparsers.add_parser(ClusterAction.ssh, help="SSH into the master node of a cluster")
-    submit_parser = subparsers.add_parser("submit", help="Submit a new spark job to a cluster")
+    submit_parser = subparsers.add_parser("submit", help="Submit a new spark job to a cluster", prefix_chars='+')
     run_parser = subparsers.add_parser(ClusterAction.run, help="Run a command on all nodes in your spark cluster")
     copy_parser = subparsers.add_parser(ClusterAction.copy, help="Copy files to all nodes in your spark cluster")
     debug_parser = subparsers.add_parser(
