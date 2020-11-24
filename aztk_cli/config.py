@@ -8,22 +8,28 @@ from aztk.models.plugins.internal import PluginReference
 from aztk.spark.models import (ClusterConfiguration, SchedulingTarget, SecretsConfiguration)
 
 
-def load_aztk_secrets() -> SecretsConfiguration:
+def load_aztk_secrets(path: str = None) -> SecretsConfiguration:
     """
     Loads aztk from .aztk/secrets.yaml files(local and global)
     """
     secrets = SecretsConfiguration()
     # read global ~/secrets.yaml
-    global_config = _load_config_file(os.path.join(aztk.utils.constants.HOME_DIRECTORY_PATH, ".aztk", "secrets.yaml"))
-    # read current working directory secrets.yaml
-    local_config = _load_config_file(aztk.utils.constants.DEFAULT_SECRETS_PATH)
+    if path is None:
+        global_config = _load_config_file(os.path.join(aztk.utils.constants.HOME_DIRECTORY_PATH, ".aztk", "secrets.yaml"))
+        # read current working directory secrets.yaml
+        local_config = _load_config_file(aztk.utils.constants.DEFAULT_SECRETS_PATH)
 
-    if not global_config and not local_config:
-        raise aztk.error.AztkError("There is no secrets.yaml in either ./.aztk/secrets.yaml or .aztk/secrets.yaml")
+        if not global_config and not local_config:
+            raise aztk.error.AztkError("There is no secrets.yaml in either ./.aztk/secrets.yaml or .aztk/secrets.yaml")
 
-    if global_config:    # Global config is optional
-        _merge_secrets_dict(secrets, global_config)
-    if local_config:
+        if global_config:    # Global config is optional
+            _merge_secrets_dict(secrets, global_config)
+        if local_config:
+            _merge_secrets_dict(secrets, local_config)
+    else:
+        local_config = _load_config_file(path)
+        if not local_config:
+            raise aztk.error.AztkError("There is no secrets.yaml in {}".format(path))
         _merge_secrets_dict(secrets, local_config)
 
     # Validate and raise error if any

@@ -29,10 +29,11 @@ def setup_parser(parser: argparse.ArgumentParser):
                         help="specify the OS version of ubuntu, 16.04|18.04")
     parser.add_argument("--cluster-path", dest="cluster_path", help="Path of cluster.yaml", default=None)
     parser.add_argument("--spark-conf", dest="spark_conf", help="Path of spark-default.conf", default=None)
+    parser.add_argument("--secret-path", dest="secret_path", help="Path of secret.yaml", default=None)
 
 
 def execute(args: typing.NamedTuple):
-    spark_client = aztk.spark.Client(config.load_aztk_secrets())
+    spark_client = aztk.spark.Client(config.load_aztk_secrets(args.secret_path))
     cluster_conf = ClusterConfiguration()
     cluster_conf.spark_configuration = load_aztk_spark_config(args.spark_conf)
 
