@@ -38,6 +38,18 @@ class NodeData:
         self.zipf.close()
         return self
 
+    def add_file_with_name(self, file: str, zip_name: str, binary: bool = True):
+        if not file:
+            return
+        if isinstance(file, (str, bytes)):
+            with io.open(file, "r", encoding="UTF-8") as f:
+                if binary:
+                    self.zipf.write(file, zip_name)
+                else:
+                    self.zipf.writestr(zip_name, f.read().replace("\r\n", "\n"))
+        elif isinstance(file, models.File):
+            self.zipf.writestr(zip_name, file.payload.getvalue())
+
     def add_file(self, file: str, zip_dir: str, binary: bool = True):
         if not file:
             return
@@ -74,15 +86,18 @@ class NodeData:
         spark_configuration = self.cluster_config.spark_configuration
         if not spark_configuration:
             return
-        self.add_files(
-            [
-                spark_configuration.spark_defaults_conf,
-                spark_configuration.spark_env_sh,
-                spark_configuration.core_site_xml,
-            ],
-            "conf",
-            binary=False,
-        )
+        ##self.add_files(
+        #    [
+        #        spark_configuration.spark_defaults_conf,
+        #        spark_configuration.spark_env_sh,
+        #        spark_configuration.core_site_xml,
+        #    ],
+        #    "conf",
+        #    binary=False,
+        #)
+        self.add_file_with_name(spark_configuration.spark_defaults_conf, "conf/spark-defaults.conf", binary=False)
+        self.add_file_with_name(spark_configuration.spark_env_sh, "conf/spark-env.sh", binary=False)
+        self.add_file_with_name(spark_configuration.core_site_xml, "conf/core-site.xml", binary=False)
 
         # add ssh keys for passwordless ssh
         self.zipf.writestr("id_rsa.pub", spark_configuration.ssh_key_pair["pub_key"])
