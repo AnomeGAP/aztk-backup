@@ -19,7 +19,7 @@ class ToolkitEnvironmentDefinition:
 
 TOOLKIT_MAP = dict(
     spark=ToolkitDefinition(
-        versions=["1.6.3", "2.1.0", "2.2.0", "2.3.0"],
+        versions=["1.6.3", "2.1.0", "2.2.0", "2.3.0", "2.4.2", "3.0.1"],
         environments=dict(
             base=ToolkitEnvironmentDefinition(),
             r=ToolkitEnvironmentDefinition(),
