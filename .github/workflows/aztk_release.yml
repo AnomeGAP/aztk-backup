@@ -1,0 +1,38 @@
+name: release aztk
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - aztk_version
+      - .github/workflows/aztk_release.yml
+
+env:
+  ACR_DOCKER_REPO: ${{ secrets.ACR_DOCKER_REPO }}
+  ACR_DOCKER_USERNAME: ${{ secrets.ACR_DOCKER_USERNAME }}
+  ACR_DOCKER_PASSWORD: ${{ secrets.ACR_DOCKER_PASSWORD }}
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Get versioning information
+        id: versionings
+        run: |
+          echo "::set-output name=AZTK_VER::$(tail -n 1 aztk_version)"
+
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ steps.versionings.outputs.AZTK_VER }}
+          release_name: ${{ steps.versionings.outputs.AZTK_VER }}
+          body_path: aztk_version
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
