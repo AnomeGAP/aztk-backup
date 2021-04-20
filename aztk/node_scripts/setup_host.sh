@@ -14,9 +14,17 @@ docker_run_options=$3
 
 install_prerequisites () {
     echo "Installing pre-reqs"
+    SIXTY=60
+    curl https://get.docker.com | sh
+    sudo systemctl start docker && sudo systemctl enable docker
 
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+    echo "Setup the stable repository and the GPG key"
+    distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+    echo "the install url=https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list"
+    curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+    curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+
 
     packages=(
         apt-transport-https
@@ -25,17 +33,36 @@ install_prerequisites () {
         software-properties-common
         python3-pip
         python3-venv
-        docker-ce
     )
-
     echo "running apt-get install -y --no-install-recommends \"${packages[@]}\""
     apt-get -y update &&
     apt-get install -y --no-install-recommends "${packages[@]}"
 
+
     if [ $AZTK_GPU_ENABLED == "true" ]; then
-        apt-get install -y nvidia-384 nvidia-modprobe
-        wget -P /tmp https://github.com/NVIDIA/nvidia-docker/releases/download/v1.0.1/nvidia-docker_1.0.1-1_amd64.deb
-        sudo dpkg -i /tmp/nvidia-docker*.deb && rm /tmp/nvidia-docker*.deb
+        START=$(date +%s)
+        echo "start install nvidia-driver"
+        sudo add-apt-repository ppa:graphics-drivers/ppa
+        sudo apt-get update
+        sudo apt install -y xserver-xorg-video-nvidia-418-server
+        sudo apt install -y libnvidia-cfg1-418-server
+        sudo apt install -y nvidia-driver-418-server
+        echo "finish install nvidia-driver"
+
+        echo "start install nvidia-docker2"
+        sudo apt-get update
+        sudo apt-get install -y nvidia-docker2
+        echo "finish install nvidia-docker2"
+
+
+        echo "start restart docker "
+        sudo systemctl restart docker
+        echo "finish restart docker "
+        END=$(date +%s)
+        DIFF=$(( $END - $START ))
+        sec=$(($DIFF % $SIXTY))
+        min=$(( $(( $DIFF - $sec )) / $SIXTY ))
+        echo "GPU installation total: $min min $sec sec"
     fi
     echo "Finished installing pre-reqs"
 }
@@ -68,9 +95,38 @@ pull_docker_container () {
         sleep $i**2;
     done
     echo "Finished pulling $docker_repo_name"
+
+    # Unzip resource files and set permissions
+    chmod 777 $AZTK_WORKING_DIR/aztk/node_scripts/docker_main.sh
+
+    # Check docker is running
+    docker info > /dev/null 2>&1
+    if [ $? -ne 0 ]; then
+    echo "UNKNOWN - Unable to talk to the docker daemon"
+    exit 3
+    fi
 }
 
-install_python_dependencies () {
+install_python () {
+    echo "Node python version:"
+    python3 --version
+    # set up aztk python environment
+    export LC_ALL=C.UTF-8
+    export LANG=C.UTF-8
+    # pin pipenv dependencies (and transitive dependencies) since pipenv does not
+    python3 -m pip install setuptools=="42.0.2"
+    python3 -m pip install zipp=="1.1.0"
+    python3 -m pip install virtualenv=="20.0.0"
+    # ensure these packages (pip, pipenv) are compatibile before upgrading
+    python3 -m pip install pip=="18.0" pipenv=="2018.7.1"
+    python3 -m pip install --ignore-installed PyYAML=="5.3"
+    python3 -m pip install importlib-resources=="1.0.2"
+    mkdir -p $AZTK_WORKING_DIR/.aztk-env
+    cp $AZTK_WORKING_DIR/aztk/node_scripts/Pipfile $AZTK_WORKING_DIR/.aztk-env
+    cp $AZTK_WORKING_DIR/aztk/node_scripts/Pipfile.lock $AZTK_WORKING_DIR/.aztk-env
+    cd $AZTK_WORKING_DIR/.aztk-env
+    export PIPENV_VENV_IN_PROJECT=true
+    #Installing python dependencies
     echo "Installing python dependencies"
     pipenv install --python /usr/bin/python3m --ignore-pipfile
     pip --version
@@ -109,64 +165,60 @@ run_docker_container () {
 
 
 main () {
-    time(
-        install_prerequisites
-    ) 2>&1
-
+    SIXTY=60
+    START1=$(date +%s)
+    install_prerequisites
+    END1=$(date +%s)
+    DIFF=$(( $END1 - $START1 ))
+    sec=$(($DIFF % $SIXTY))
+    min=$(( $(( $DIFF - $sec )) / $SIXTY ))
+    echo "Install_perrequisites(include GPU) total: $min min $sec sec"
     # set hostname in /etc/hosts if dns cannot resolve
     if ! host $HOSTNAME ; then
         echo $(hostname -I | awk '{print $1}') $HOSTNAME >> /etc/hosts
     fi
 
-    time(
-        install_docker_compose
-    ) 2>&1
+    START=$(date +%s)
+    install_docker_compose
+    END=$(date +%s)
+    DIFF=$(( $END - $START ))
+    sec=$(($DIFF % $SIXTY))
+    min=$(( $(( $DIFF - $sec )) / $SIXTY ))
+    echo "install_docker_compose total: $min min $sec sec"
 
-    time(
-        pull_docker_container
-    ) 2>&1
+    START=$(date +%s)
+    pull_docker_container
+    END=$(date +%s)
+    DIFF=$(( $END - $START ))
+    sec=$(($DIFF % $SIXTY))
+    min=$(( $(( $DIFF - $sec )) / $SIXTY ))
+    echo "pull_docker_container total: $min min $sec sec"
 
-    # Unzip resource files and set permissions
-    chmod 777 $AZTK_WORKING_DIR/aztk/node_scripts/docker_main.sh
-
-    # Check docker is running
-    docker info > /dev/null 2>&1
-    if [ $? -ne 0 ]; then
-    echo "UNKNOWN - Unable to talk to the docker daemon"
-    exit 3
-    fi
-
-    echo "Node python version:"
-    python3 --version
-
-    # set up aztk python environment
-    export LC_ALL=C.UTF-8
-    export LANG=C.UTF-8
-    # pin pipenv dependencies (and transitive dependencies) since pipenv does not
-    python3 -m pip install setuptools=="42.0.2"
-    python3 -m pip install zipp=="1.1.0"
-    python3 -m pip install virtualenv=="20.0.0"
-    # ensure these packages (pip, pipenv) are compatibile before upgrading
-    python3 -m pip install pip=="18.0" pipenv=="2018.7.1"
-    python3 -m pip install --ignore-installed PyYAML=="5.3"
-    python3 -m pip install importlib-resources=="1.0.2"
-    mkdir -p $AZTK_WORKING_DIR/.aztk-env
-    cp $AZTK_WORKING_DIR/aztk/node_scripts/Pipfile $AZTK_WORKING_DIR/.aztk-env
-    cp $AZTK_WORKING_DIR/aztk/node_scripts/Pipfile.lock $AZTK_WORKING_DIR/.aztk-env
-    cd $AZTK_WORKING_DIR/.aztk-env
-    export PIPENV_VENV_IN_PROJECT=true
-
-    time(
-        install_python_dependencies
-    ) 2>&1
+    START=$(date +%s)
+    install_python
+    END=$(date +%s)
+    DIFF=$(( $END - $START ))
+    sec=$(($DIFF % $SIXTY))
+    min=$(( $(( $DIFF - $sec )) / $SIXTY ))
+    echo "install_python total: $min min $sec sec"
 
     export PYTHONPATH=$PYTHONPATH:$AZTK_WORKING_DIR
 
-    time(
-        run_docker_container
-    ) 2>&1
+    START=$(date +%s)
+    run_docker_container
+    END=$(date +%s)
+    DIFF=$(( $END - $START ))
+    sec=$(($DIFF % $SIXTY))
+    min=$(( $(( $DIFF - $sec )) / $SIXTY ))
+    echo "run_docker_container total: $min min $sec sec"
 }
 
 apt-mark hold $(uname -r)
+STARTm=$(date +%s)
 main
+ENDm=$(date +%s)
+DIFF=$(( $ENDm - $STARTm ))
+sec=$(($DIFF % $SIXTY))
+min=$(( $(( $DIFF - $sec )) / $SIXTY ))
+echo "AZTK all process execution total: $min min $sec sec"
 apt-mark unhold $(uname -r)
